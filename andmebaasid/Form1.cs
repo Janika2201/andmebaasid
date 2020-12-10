@@ -16,11 +16,12 @@ namespace andmebaasid
     {
         SqlConnection connect = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename =|DataDirectory|\AppData\Tooded.mdf; Integrated Security = True");
         SqlCommand command;
-		SqlDataAdapter adapter;
+		SqlDataAdapter adapter, adapter2;
         int Id = 0;
         public Form1()
         {
             InitializeComponent();
+            DisplayData();
             
         }
 
@@ -31,6 +32,15 @@ namespace andmebaasid
             adapter = new SqlDataAdapter("SELECT * FROM Tootetable", connect);
             adapter.Fill(table);
             dataGridView1.DataSource = table;
+            pictureBox1.Image = Image.FromFile("../../Images/piim.jpg");
+
+            adapter2 = new SqlDataAdapter("SELECT Kategooria_nimetus FROM Kategooria", connect);
+            DataTable kak_tabel = new DataTable();
+            adapter2.Fill(kak_tabel);
+            foreach (DataRow row in kak_tabel.Rows)
+            {
+                comboBox1.Items.Add(row["Kategooria_nimetus"]);
+            }
             connect.Close();
         }
         private void ClearData()
@@ -39,7 +49,7 @@ namespace andmebaasid
             Toodetxt.Text = "";
             Kogustxt.Text = "";
             Hindtxt.Text = "";
-
+            pictureBox1.Image = Image.FromFile("../../Images/maslo.jpg");
         }
 
         /*
@@ -88,19 +98,23 @@ namespace andmebaasid
             Toodetxt.Text=dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
             Kogustxt.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
             Hindtxt.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-            pictureBox1.Image = Image.FromFile(@"C: \Users\opilane\Source\Repos\andmebaasid\andmebaasid\Images\" + dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString());
+            pictureBox1.Image = Image.FromFile(@"C:\Users\opilane\source\repos\andmebaasid\andmebaasid\Images\" + dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString());
+            string v = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
+            comboBox1.SelectedIndex = Int32.Parse(v)-1;
         }
 
         private void btn_insert_Click(object sender, EventArgs e)
         {
-            if (Toodetxt.Text != "" && Kogustxt.Text != "" && Hindtxt.Text != "")
+            if (Toodetxt.Text != "" && Kogustxt.Text != "" && Hindtxt.Text != ""&& comboBox1.SelectedItem !=null)
             {
-                command = new SqlCommand("insert into Tootetable(Toodenimetus,Kogus,Hind,Pilt) values(@toode,@kogus,@hind,@pilt)", connect);
+                command = new SqlCommand("insert into Tootetable(Toodenimetus,Kogus,Hind,Pilt,Kategooria_Id) values(@toode,@kogus,@hind,@pilt,@kat)", connect);
                 connect.Open();
                 command.Parameters.AddWithValue("@toode", Toodetxt.Text);
                 command.Parameters.AddWithValue("@kogus", Kogustxt.Text);
                 command.Parameters.AddWithValue("@hind", Hindtxt.Text);
-                command.Parameters.AddWithValue("@pilt", save.FileName+save.Filter);
+                string file_pilt = Toodetxt.Text + ".jpg";
+                command.Parameters.AddWithValue("@pilt", file_pilt);
+                command.Parameters.AddWithValue("@kat", (comboBox1.SelectedIndex+1));
                 command.ExecuteNonQuery();
                 connect.Close();
                 ClearData();
@@ -143,13 +157,20 @@ namespace andmebaasid
             {
                 OpenFileDialog open = new OpenFileDialog();
                 open.Filter = "Image Files(*.jpeg;*.bmp;*png;*.jpg)|*.jpeg;*.bmp;*png;*.jpg";
+                open.InitialDirectory = Path.GetFullPath(@"C: \Users\opilane\Source\Repos\andmebaasid\andmebaasid\Images");
                 if (open.ShowDialog() == DialogResult.OK)
                 {
                     SaveFileDialog save = new SaveFileDialog();
-                    save.FileName = Toodetxt.Text +"_"+ Id;
+                    save.FileName = Toodetxt.Text+".jpg";
                     save.FileName = "Image Files(*.jpeg; *.bmp; *png; *.jpg)| *.jpeg; *.bmp; *png; *.jpg";
-                    save.InitialDirectory = Path.GetFullPath(@"C: \Users\opilane\Source\Repos\andmebaasid\andmebaasid\Images\Allalaaditud fail.jpg");
+                    save.InitialDirectory = Path.GetFullPath(@"C: \Users\opilane\Source\Repos\andmebaasid\andmebaasid\Images");
                     save.ShowDialog();
+                }
+                if (save.ShowDialog()==DialogResult.OK)
+                {
+                    File.Copy(open.FileName, save.Filter);
+                    save.RestoreDirectory = true;
+                    pictureBox1.Image = Image.FromFile(save.FileName);
                 }
             }
             else

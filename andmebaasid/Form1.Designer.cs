@@ -44,6 +44,8 @@
             this.tootetableTableAdapter = new andmebaasid.ToodedDataSetTableAdapters.TootetableTableAdapter();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btn_Lisapilt = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tootetableBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.toodedDataSet)).BeginInit();
@@ -101,7 +103,7 @@
             // 
             // btn_insert
             // 
-            this.btn_insert.Location = new System.Drawing.Point(41, 245);
+            this.btn_insert.Location = new System.Drawing.Point(160, 335);
             this.btn_insert.Name = "btn_insert";
             this.btn_insert.Size = new System.Drawing.Size(113, 75);
             this.btn_insert.TabIndex = 6;
@@ -170,11 +172,30 @@
             this.btn_Lisapilt.UseVisualStyleBackColor = true;
             this.btn_Lisapilt.Click += new System.EventHandler(this.btn_Lisapilt_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 241);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(58, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Kategooria";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(98, 233);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 14;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(955, 536);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.btn_Lisapilt);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.dataGridView1);
@@ -215,6 +236,8 @@
         private ToodedDataSetTableAdapters.TootetableTableAdapter tootetableTableAdapter;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button btn_Lisapilt;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 
